@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lyming.shiro.chapter4.dao.UserDao">
+
+    <insert id="saveUser" useGeneratedKeys="true" keyProperty="id"
+            parameterType="com.lyming.shiro.chapter4.entity.User">
+        INSERT INTO user VALUES(#{id},#{username},#{password},#{salt})
+    </insert>
+    <select id="findByUsername" resultType="com.lyming.shiro.chapter4.entity.User" parameterType="String">
+        SELECT * FROM user WHERE username = #{username}
+    </select>
+
+
+    <resultMap id="userMap" type="User">
+        <id column="uid" property="id"/>
+        <result column="username" property="username"/>
+        <!-- 角色信息 -->
+        <collection property="roles" javaType="list" ofType="Role">
+            <id column="rid" property="id"/>
+            <result column="rname" property="name"/>
+        </collection>
+    </resultMap>
+
+    <select id="findRolesByUsername" resultMap="userMap" parameterType="String">
+        SELECT
+            u.id uid,
+            u.username,
+            r.id rid,
+            r.name rname
+        FROM
+            user_role ur
+            LEFT JOIN user u ON ur.user_id = u.id
+            LEFT JOIN role r ON r.id = ur.role_id
+        WHERE
+            u.username = #{username}
+    </select>
+    <select id="findPermsByRoleId" resultType="com.lyming.shiro.chapter4.entity.Perms" parameterType="Integer">
+        SELECT
+            p.id,p.name,p.url
+        FROM
+            role_perms rp
+            LEFT JOIN role r ON rp.role_id = r.id
+            LEFT JOIN perms p ON p.id = rp.perms_id
+        WHERE
+            r.id = #{id};
+    </select>
+</mapper>

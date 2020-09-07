@@ -1,4 +1,5 @@
 <%@page contentType="text/html; UTF-8" pageEncoding="utf-8" isELIgnored="false" %>
+<%@taglib prefix="shiro" uri="http://shiro.apache.org/tags" %>
 <!doctype html>
 <html lang="en">
 <head>
@@ -9,12 +10,31 @@
     <title>Document</title>
 </head>
 <body>
-    <h1>系统主页V1.0</h1>
-    <ul>
-       <li href="#">用户管理</li>
-       <li href="#">商品管理</li>
-       <li href="#">订单管理</li>
-       <li href="#">物流管理</li>
-    </ul>
+<h1>系统主页V1.0</h1>
+<a href="${pageContext.request.contextPath}/user/logout">退出登录</a>
+<ul>
+    <shiro:hasAnyRoles name="user,admin">
+        <li><a href="#">用户管理</a></li>
+        <ul>
+            <shiro:hasPermission name="user:find:*">
+                <li><a href="#">查询用户</a></li>
+            </shiro:hasPermission>
+            <shiro:hasPermission name="user:add:*">
+                <li><a href="#">添加用户</a></li>
+            </shiro:hasPermission>
+            <shiro:hasPermission name="user:delete:*">
+                <li><a href="#">删除用户</a></li>
+            </shiro:hasPermission>
+            <shiro:hasPermission name="user:update:*">
+                <li><a href="#">修改用户</a></li>
+            </shiro:hasPermission>
+        </ul>
+    </shiro:hasAnyRoles>
+    <shiro:hasRole name="admin">
+        <li><a href="#">商品管理</a></li>
+        <li><a href="#">订单管理</a></li>
+        <li><a href="#">物流管理</a></li>
+    </shiro:hasRole>
+</ul>
 </body>
 </html>

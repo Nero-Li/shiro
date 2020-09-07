@@ -9,12 +9,11 @@
     <title>Document</title>
 </head>
 <body>
-<h1>用户登录</h1>
-<form action="${pageContext.request.contextPath}/user/login" method="post">
-    用户名:<input type="text" name="username"> <br/>
-    密码 : <input type="text" name="password"> <br>
-    <input type="submit" value="登录">
-</form>
-<a href="register.jsp">注册用户</a>
+    <h1>用户注册</h1>
+    <form action="${pageContext.request.contextPath}/user/register" method="post">
+        用户名:<input type="text" name="username" > <br/>
+        密码  : <input type="text" name="password"> <br>
+        <input type="submit" value="立即注册">
+    </form>
 </body>
 </html>

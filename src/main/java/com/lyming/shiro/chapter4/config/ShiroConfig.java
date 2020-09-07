@@ -1,6 +1,7 @@
 package com.lyming.shiro.chapter4.config;
 
 import com.lyming.shiro.chapter4.realm.CustomRealm;
+import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.realm.Realm;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
@@ -24,8 +25,10 @@ public class ShiroConfig {
         ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
         shiroFilterFactoryBean.setSecurityManager(securityManager);
         LinkedHashMap<String, String> map = new LinkedHashMap<>();
+        map.put("/user/login","anon");
+        map.put("/user/register","anon");
+        map.put("/register.jsp","anon");
         map.put("/**","authc");
-        map.put("/login.jsp","anon");
         shiroFilterFactoryBean.setFilterChainDefinitionMap(map);
         shiroFilterFactoryBean.setLoginUrl("/login.jsp");
         return shiroFilterFactoryBean;
@@ -41,6 +44,12 @@ public class ShiroConfig {
     @Bean(name = "customRealm")
     public Realm getRealm(){
         CustomRealm customRealm = new CustomRealm();
+        //修改密码校验匹配器
+        HashedCredentialsMatcher hashedCredentialsMatcher = new HashedCredentialsMatcher();
+        //设置加密算法为md5
+        hashedCredentialsMatcher.setHashAlgorithmName("MD5");
+        hashedCredentialsMatcher.setHashIterations(1024);
+        customRealm.setCredentialsMatcher(hashedCredentialsMatcher);
         return customRealm;
     }
 }
