@@ -13,6 +13,7 @@
 <form action="${pageContext.request.contextPath}/user/login" method="post">
     用户名:<input type="text" name="username"> <br/>
     密码 : <input type="text" name="password"> <br>
+    请输入验证码<input type="text" name="captcha"><img src="${pageContext.request.contextPath}/user/getCaptcha" alt="验证码"><br>
     <input type="submit" value="登录">
 </form>
 <a href="register.jsp">注册用户</a>

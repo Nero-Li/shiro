@@ -1,5 +1,6 @@
 package com.lyming.shiro.chapter4.config;
 
+import com.lyming.shiro.chapter4.cache.RedisCacheManager;
 import com.lyming.shiro.chapter4.realm.CustomRealm;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.realm.Realm;
@@ -28,6 +29,7 @@ public class ShiroConfig {
         map.put("/user/login","anon");
         map.put("/user/register","anon");
         map.put("/register.jsp","anon");
+        map.put("/user/getCaptcha","anon");
         map.put("/**","authc");
         shiroFilterFactoryBean.setFilterChainDefinitionMap(map);
         shiroFilterFactoryBean.setLoginUrl("/login.jsp");
@@ -50,6 +52,16 @@ public class ShiroConfig {
         hashedCredentialsMatcher.setHashAlgorithmName("MD5");
         hashedCredentialsMatcher.setHashIterations(1024);
         customRealm.setCredentialsMatcher(hashedCredentialsMatcher);
+        //开启缓存管理
+        customRealm.setCacheManager(new RedisCacheManager());
+        //开启全局缓存
+        customRealm.setCachingEnabled(true);
+        //认证缓存
+        customRealm.setAuthenticationCacheName("authenticationCache");
+        customRealm.setAuthenticationCachingEnabled(true);
+        //授权缓存
+        customRealm.setAuthorizationCacheName("authorizationCache");
+        customRealm.setAuthorizationCachingEnabled(true);
         return customRealm;
     }
 }

@@ -6,6 +6,7 @@ import com.lyming.shiro.chapter4.entity.Perms;
 import com.lyming.shiro.chapter4.entity.Role;
 import com.lyming.shiro.chapter4.entity.User;
 import com.lyming.shiro.chapter4.service.UserService;
+import com.lyming.shiro.chapter4.source.MyByteSource;
 import com.lyming.shiro.chapter4.utils.ApplicationContextUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
@@ -73,7 +74,7 @@ public class CustomRealm extends AuthorizingRealm {
         User user = userServiceImpl.findByUsername(principal);
         if (!ObjectUtils.isEmpty(user)) {
             log.info("===================认证成功========================");
-            return new SimpleAuthenticationInfo(principal, user.getPassword(), ByteSource.Util.bytes(user.getSalt()), this.getName());
+            return new SimpleAuthenticationInfo(principal, user.getPassword(), new MyByteSource(user.getSalt()), this.getName());
         }
         log.info("===================认证失败========================");
         return null;
